@@ -1,14 +1,179 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="sample.PracownikController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="859.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.PracownikController">
+  <tabs>
+    <Tab text="Przeglądaj książki">
+         <content>
+            <BorderPane>
+               <center>
+                  <TableView fx:id="tableBooks" prefHeight="474.0" prefWidth="662.0">
+                     <columns>
+                        <TableColumn fx:id="isbnCol" prefWidth="125.60000306367874" text="ISBN" />
+                        <TableColumn fx:id="autCol" prefWidth="139.19998931884766" text="Autorzy" />
+                        <TableColumn fx:id="titleCol" minWidth="9.60003662109375" prefWidth="232.0" text="Tytuł" />
+                        <TableColumn fx:id="priceCol" prefWidth="69.5999755859375" text="Cena" />
+                        <TableColumn fx:id="amoutCol" prefWidth="43.20001220703125" text="Ilość" />
+                        <TableColumn fx:id="typeCol" prefWidth="91.199951171875" text="Gatunek" />
+                        <TableColumn fx:id="lengthCol" prefWidth="58.4000244140625" text="Długość" />
+                        <TableColumn fx:id="phCol" prefWidth="106.39990234375" text="Wydawnictwo" />
+                        <TableColumn fx:id="yearCol" prefWidth="85.5999755859375" text="Rok wydania" />
+                     </columns>
+                  </TableView>
+               </center>
+               <top>
+                  <HBox alignment="CENTER" prefHeight="55.0" prefWidth="950.0" spacing="20.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Wyszukaj" />
+                        <TextField fx:id="searchField" prefHeight="26.0" prefWidth="122.0" />
+                        <Button fx:id="deleteBookBtn" mnemonicParsing="false" onAction="#deleteBookClicked" text="Usuń wybraną książkę" />
+                        <Button fx:id="changePrice" mnemonicParsing="false" onAction="#changePriceClicked" text="Zmień cenę wybranej książki" />
+                        <Label fx:id="newPriceLabel" text="Nowa cena" />
+                        <TextField fx:id="priceTxt" prefHeight="26.0" prefWidth="110.0" />
+                        <Button fx:id="confirmPrice" mnemonicParsing="false" onAction="#confirmPriceClicked" text="Zatwierdź" />
+                     </children>
+                  </HBox>
+               </top>
+            </BorderPane>
+         </content>
+    </Tab>
+    <Tab text="Nowa książka">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="isbnTxt" layoutX="60.0" layoutY="74.0" />
+                  <TextField fx:id="titleTxt" layoutX="60.0" layoutY="125.0" />
+                  <TextField fx:id="lengthTxt" layoutX="60.0" layoutY="177.0" />
+                  <TextField fx:id="price2Txt" layoutX="60.0" layoutY="223.0" />
+                  <TextField fx:id="idWydTxt" layoutX="60.0" layoutY="328.0" />
+                  <TextField fx:id="yearTxt" layoutX="60.0" layoutY="377.0" />
+                  <TextField fx:id="amountTxt" layoutX="60.0" layoutY="430.0" />
+                  <TextField fx:id="namePHTxt" layoutX="280.0" layoutY="122.0" />
+                  <TextField fx:id="addressTxt" layoutX="280.0" layoutY="178.0" />
+                  <TextField fx:id="telTxt" layoutX="280.0" layoutY="236.0" />
+                  <Separator layoutX="442.0" layoutY="-3.0" orientation="VERTICAL" prefHeight="555.0" prefWidth="13.0" />
+                  <TextField fx:id="isbnAutTxt" layoutX="559.0" layoutY="86.0" />
+                  <TextField fx:id="idAutTxt" layoutX="462.0" layoutY="178.0" />
+                  <Button fx:id="addBook" layoutX="187.0" layoutY="495.0" mnemonicParsing="false" onAction="#addBookClicked" text="Dodaj książkę" />
+                  <Button fx:id="authorToBookAdded" layoutX="564.0" layoutY="377.0" mnemonicParsing="false" onAction="#addAuthorToBookClicked" text="Dodaj autora do książki" />
+                  <CheckBox fx:id="newPH" layoutX="292.0" layoutY="51.0" mnemonicParsing="false" text="Nowe wydawnictwo" />
+                  <CheckBox fx:id="newAuthor" layoutX="686.0" layoutY="151.0" mnemonicParsing="false" text="Nowy autor" />
+                  <TextField fx:id="firstNameTxt" layoutX="658.0" layoutY="211.0" />
+                  <TextField fx:id="nameTxt" layoutX="658.0" layoutY="262.0" />
+                  <Label layoutX="120.0" layoutY="50.0" text="ISBN" />
+                  <Label layoutX="178.0" layoutY="9.0" text="Dodaj książkę">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="120.0" layoutY="106.0" text="Tytuł" />
+                  <Label layoutX="110.0" layoutY="157.0" text="Długość" />
+                  <Label layoutX="120.0" layoutY="207.0" text="Cena" />
+                  <Label layoutX="109.0" layoutY="254.0" text="Gatunek" />
+                  <Label layoutX="87.0" layoutY="311.0" text="ID Wydawnictwa" />
+                  <Label layoutX="620.0" layoutY="59.0" text="ISBN" />
+                  <Label layoutX="99.0" layoutY="360.0" text="Rok wydania" />
+                  <Label layoutX="120.0" layoutY="414.0" text="Ilość" />
+                  <Label layoutX="302.0" layoutY="98.0" text="Nazwa wydawnictwa" />
+                  <Label layoutX="338.0" layoutY="157.0" text="Adres" />
+                  <Label layoutX="333.0" layoutY="215.0" text="Telefon" />
+                  <Label layoutX="550.0" layoutY="12.0" text="Dodaj autora do książki">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="511.0" layoutY="151.0" text="ID Autora" />
+                  <Label layoutX="718.0" layoutY="182.0" text="Imię" />
+                  <Label layoutX="703.0" layoutY="240.0" text="Nazwisko" />
+                  <ComboBox fx:id="typeBox" layoutX="57.0" layoutY="275.0" prefWidth="150.0" />
+               </children></Pane>
+         </content>
+    </Tab>
+      <Tab text="Nowe zamówienie">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="nipTxt" layoutX="89.0" layoutY="100.0" />
+                  <TextField layoutX="89.0" layoutY="150.0" />
+                  <TextField layoutX="89.0" layoutY="201.0" />
+                  <TextField fx:id="imieKlientaTxt" layoutX="88.0" layoutY="297.0" />
+                  <TextField fx:id="nazwiskoKlientaTxt" layoutX="89.0" layoutY="352.0" />
+                  <TextField fx:id="addressKlientaTxt" layoutX="88.0" layoutY="410.0" />
+                  <CheckBox fx:id="nowyKlientBox" layoutX="120.0" layoutY="241.0" mnemonicParsing="false" text="Nowy klient" />
+                  <Separator layoutX="328.0" orientation="VERTICAL" prefHeight="548.0" prefWidth="24.0" />
+                  <TextField fx:id="nrZamTxt" layoutX="499.0" layoutY="88.0" />
+                  <TextField fx:id="isbnZamTxt" layoutX="499.0" layoutY="138.0" />
+                  <TextField fx:id="iloscTxt" layoutX="499.0" layoutY="189.0" />
+                  <Button fx:id="addNewOrderBtn" layoutX="91.0" layoutY="457.0" mnemonicParsing="false" onAction="#addOrderClicked" text="Dodaj nowe zamówienia" />
+                  <Button fx:id="addElementBtn" layoutX="492.0" layoutY="246.0" mnemonicParsing="false" onAction="#addElementClicked" text="Dodaj element zamówienia" />
+                  <Label layoutX="114.0" layoutY="37.0" text="Dodaj zamówienie" />
+                  <Label layoutX="501.0" layoutY="37.0" text="Dodaj element zamówienia" />
+                  <Label layoutX="149.0" layoutY="80.0" text="NIP" />
+                  <Label fx:id="realizatorTxt" layoutX="132.0" layoutY="130.0" text="Realizator" />
+                  <Label fx:id="dataTxt" layoutX="146.0" layoutY="181.0" text="Data" />
+                  <Label layoutX="149.0" layoutY="274.0" text="Imię" />
+                  <Label layoutX="133.0" layoutY="329.0" text="Nazwisko" />
+                  <Label layoutX="149.0" layoutY="385.0" text="Adres" />
+                  <Label layoutX="522.0" layoutY="63.0" text="Numer zamówienia" />
+                  <Label layoutX="559.0" layoutY="117.0" text="ISBN" />
+                  <Label layoutX="559.0" layoutY="167.0" text="Ilość" />
+               </children>
+            </Pane>
+         </content>
+      </Tab>
+      <Tab text="Zamówienia">
+         <content>
+            <BorderPane prefHeight="618.0" prefWidth="921.0">
+               <center>
+                  <TableView fx:id="zamTab" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="nrCol" prefWidth="50.40002518892288" text="Nr zam" />
+                        <TableColumn fx:id="isbnZCol" prefWidth="107.19997787475586" text="ISBN" />
+                        <TableColumn fx:id="titleZCol" prefWidth="85.60003662109375" text="Tytuł" />
+                        <TableColumn fx:id="amountZCol" prefWidth="57.59999084472656" text="Ilość" />
+                        <TableColumn fx:id="monCol" prefWidth="104.0" text="Wartość zam." />
+                        <TableColumn fx:id="nipCol" prefWidth="84.79998779296875" text="NIP" />
+                        <TableColumn fx:id="nameZCol" prefWidth="99.99993896484375" text="Nazwisko" />
+                        <TableColumn fx:id="firstnameZCol" prefWidth="67.99993896484375" text="Imię" />
+                        <TableColumn fx:id="adressCol" prefWidth="112.79998779296875" text="Adres" />
+                        <TableColumn fx:id="statZCol" prefWidth="106.39990234375" text="Status" />
+                        <TableColumn fx:id="dateCol" prefWidth="76.7999267578125" text="Data" />
+                     </columns>
+                  </TableView>
+               </center>
+               <top>
+                  <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="59.0" prefWidth="358.0">
+                           <children>
+                              <Label text="Wybierz zamowienia do wyświetlenia" />
+                              <ChoiceBox fx:id="statsChoice" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                        <Label text="Zmień status wybranego zamówienia" />
+                        <ChoiceBox fx:id="newStat" prefWidth="150.0" />
+                        <Button fx:id="statusChange" mnemonicParsing="false" onAction="#changeStatusClicked" text="Zmień status" />
+                     </children>
+                  </HBox>
+               </top>
+            </BorderPane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>

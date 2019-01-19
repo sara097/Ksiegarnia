@@ -28,7 +28,7 @@ public class LoginController {
     private Button loginBtn;
 
     @FXML
-    void initialize() {
+   void initialize()  {
         loginBtn.setDisable(true);
         loginTxt.textProperty().addListener((observable, oldValue, newValue) -> {
             loginBtn.setDisable(newValue.trim().isEmpty());
@@ -83,23 +83,6 @@ public class LoginController {
         Statement stmt = con.createStatement();
         System.out.println("connected");
 
-
-//        try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement();) {
-//
-//            String SQL = "SELECT TOP 10 * FROM dbo.KSIAZKI_AUT_WYD";
-//            ResultSet rs = stmt.executeQuery(SQL);
-//
-//            // Iterate through the data in the result set and display it.
-//            while (rs.next()) {
-//                System.out.println(rs.getString("TYTUL") + " " + rs.getString("AUTORZY"));
-//            }
-//        }
-//        // Handle any errors that may have occurred.
-//        catch (SQLException e) {
-//            e.printStackTrace();
-//            throw new IllegalArgumentException("Wrong password");
-//
-//        }
     }
 
     private void newScene(String fxml, String name) throws IOException {
