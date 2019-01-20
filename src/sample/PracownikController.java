@@ -12,6 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -33,7 +35,7 @@ public class PracownikController {
             );
 
     @FXML
-    private TableView<Ksiazka> tableBooks;
+    private TableView<Book> tableBooks;
 
     @FXML
     private TableColumn<?, ?> isbnCol;
@@ -64,9 +66,6 @@ public class PracownikController {
 
     @FXML
     private TextField searchField;
-
-    @FXML
-    private Button deleteBookBtn;
 
     @FXML
     private Button changePrice;
@@ -117,12 +116,6 @@ public class PracownikController {
     private TextField idAutTxt;
 
     @FXML
-    private Button addBook;
-
-    @FXML
-    private Button authorToBookAdded;
-
-    @FXML
     private CheckBox newPH;
 
     @FXML
@@ -159,16 +152,10 @@ public class PracownikController {
     private TextField iloscTxt;
 
     @FXML
-    private Button addNewOrderBtn;
+    private TextField realizatorTxt;
 
     @FXML
-    private Button addElementBtn;
-
-    @FXML
-    private Label realizatorTxt;
-
-    @FXML
-    private Label dataTxt;
+    private TextField dataTxt;
 
     @FXML
     private TableView<Order> zamTab;
@@ -213,10 +200,162 @@ public class PracownikController {
     private ChoiceBox<String> newStat;
 
     @FXML
-    private Button statusChange;
+    private CheckBox newAuthor;
 
     @FXML
-    private CheckBox newAuthor;
+    private TableView<Author> authorsTable;
+
+    @FXML
+    private TableColumn<?, ?> idAutCol;
+
+    @FXML
+    private TableColumn<?, ?> forstnameAutCol;
+
+    @FXML
+    private TableColumn<?, ?> nameAutCol;
+
+    @FXML
+    private TableView<PublishingHouse> phTable;
+
+    @FXML
+    private TableColumn<?, ?> idPhCol;
+
+    @FXML
+    private TableColumn<?, ?> namePhCol;
+
+    @FXML
+    private TableColumn<?, ?> addressPhCol;
+
+    @FXML
+    private TableColumn<?, ?> telPhCol;
+
+    @FXML
+    private TextField newTypeTxt;
+
+    @FXML
+    private TextField isbnMoreTxt;
+
+    @FXML
+    private TextField amountNewTxt;
+
+    private String connectionUrl;
+    private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<Order> orders = new ArrayList<>();
+    private ArrayList<String> gatuneks = new ArrayList<>();
+    private ArrayList<Author> authors = new ArrayList<>();
+    private ArrayList<PublishingHouse> phouses = new ArrayList<>();
+
+    private ObservableList<String> types =
+            FXCollections.observableArrayList();
+
+
+    @FXML
+    void initialize() {
+        connect("pracownik", "pracownik");
+        readBooks("");
+        addToTableBooks();
+        readOrders("wszystkie");
+        addToTableOrders();
+        statsChoice.setItems(status);
+        statsChoice.setValue("wszystkie");
+        newStat.setItems(newStatus);
+        newStat.setValue("zrealizowane");
+
+        readAuthors();
+        addAuthorsToTable();
+
+        readPH();
+        addPHToTable();
+
+        namePHTxt.setDisable(true);
+        addressTxt.setDisable(true);
+        telTxt.setDisable(true);
+        idWydTxt.setDisable(false);
+
+        firstNameTxt.setDisable(true);
+        nameTxt.setDisable(true);
+        idAutTxt.setDisable(false);
+
+        readTypes();
+        types.addAll(gatuneks);
+        typeBox.setItems(types);
+        typeBox.setValue("biografia");
+
+        imieKlientaTxt.setDisable(true);
+        nazwiskoKlientaTxt.setDisable(true);
+        addressKlientaTxt.setDisable(true);
+
+
+        statsChoice.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) ->
+                {
+                    readOrders(statsChoice.getValue());
+                    addToTableOrders();
+                });
+
+
+        searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) ->
+        {
+            readBooks(newValue);
+            addToTableBooks();
+        });
+
+        newAuthor.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) ->
+        {
+            if (newValue) {
+                firstNameTxt.setDisable(false);
+                nameTxt.setDisable(false);
+                idAutTxt.setDisable(true);
+            } else {
+                firstNameTxt.setDisable(true);
+                nameTxt.setDisable(true);
+                idAutTxt.setDisable(false);
+            }
+
+            readBooks("");
+            addToTableBooks();
+        });
+
+        newPH.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) ->
+        {
+            if (!newValue) {
+                namePHTxt.setDisable(true);
+                addressTxt.setDisable(true);
+                telTxt.setDisable(true);
+                idWydTxt.setDisable(false);
+            } else {
+                namePHTxt.setDisable(false);
+                addressTxt.setDisable(false);
+                telTxt.setDisable(false);
+                idWydTxt.setDisable(true);
+            }
+            readBooks("");
+            addToTableBooks();
+        });
+
+        nowyKlientBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) ->
+        {
+            if (!newValue) {
+                imieKlientaTxt.setDisable(true);
+                nazwiskoKlientaTxt.setDisable(true);
+                addressKlientaTxt.setDisable(true);
+
+            } else {
+                imieKlientaTxt.setDisable(false);
+                nazwiskoKlientaTxt.setDisable(false);
+                addressKlientaTxt.setDisable(false);
+            }
+            readBooks("");
+            addToTableBooks();
+        });
+
+
+        newPriceLabel.setVisible(false);
+        priceTxt.setVisible(false);
+        confirmPrice.setVisible(false);
+
+    }
 
     @FXML
     void addAuthorToBookClicked(ActionEvent event) {
@@ -226,13 +365,14 @@ public class PracownikController {
             } else {
                 execAddAuthorToBook(isbnAutTxt.getText(), Integer.valueOf(idAutTxt.getText()));
             }
-        } catch (Exception e){
+            isbnAutTxt.setText("");
+            firstNameTxt.setText("");
+            nameTxt.setText("");
+            idAutTxt.setText("");
+            showSuccesDialog();
+        } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText(null);
-            alert.setContentText("Coś poszło nie tak!");
-            alert.showAndWait();
+            showErrorDialog();
         }
 
     }
@@ -243,30 +383,29 @@ public class PracownikController {
             if (newPH.isSelected()) {
                 execAddBookAddPH(isbnTxt.getText(), titleTxt.getText(), Integer.valueOf(lengthTxt.getText()),
                         BigDecimal.valueOf(Float.valueOf(price2Txt.getText())), typeBox.getValue(),
-                        namePHTxt.getText(),addressTxt.getText(),telTxt.getText(),yearTxt.getText(),Integer.valueOf(amountTxt.getText()));
+                        namePHTxt.getText(), addressTxt.getText(), telTxt.getText(), yearTxt.getText(), Integer.valueOf(amountTxt.getText()));
             } else {
-               execAddBook(isbnTxt.getText(), titleTxt.getText(), Integer.valueOf(lengthTxt.getText()),
-                       BigDecimal.valueOf(Float.valueOf(price2Txt.getText())), typeBox.getValue(),
-                       Integer.valueOf(idWydTxt.getText()),yearTxt.getText(),Integer.valueOf(amountTxt.getText()));
+                System.out.println(isbnTxt.getText() + " - " + titleTxt.getText() + " - " + Integer.valueOf(lengthTxt.getText()));
+
+                execAddBook(isbnTxt.getText(), titleTxt.getText(), Integer.valueOf(lengthTxt.getText()),
+                        BigDecimal.valueOf(Float.valueOf(price2Txt.getText())), typeBox.getValue(),
+                        Integer.valueOf(idWydTxt.getText()), yearTxt.getText(), Integer.valueOf(amountTxt.getText()));
             }
-        } catch (Exception e){
+
+            titleTxt.setText("");
+            lengthTxt.setText("");
+            price2Txt.setText("");
+            namePHTxt.setText("");
+            addressTxt.setText("");
+            telTxt.setText("");
+            yearTxt.setText("");
+            amountTxt.setText("");
+            idWydTxt.setText("");
+            showSuccesDialog();
+        } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText(null);
-            alert.setContentText("Coś poszło nie tak!");
-            alert.showAndWait();
+            showErrorDialog();
         }
-    }
-
-    @FXML
-    void addElementClicked(ActionEvent event) {
-
-    }
-
-    @FXML
-    void addOrderClicked(ActionEvent event) {
-
     }
 
     @FXML
@@ -280,37 +419,37 @@ public class PracownikController {
     @FXML
     void confirmPriceClicked(ActionEvent event) {
         try {
-            Ksiazka ksiazkaDoZmiany = tableBooks.getSelectionModel().getSelectedItem();
+            Book bookDoZmiany = tableBooks.getSelectionModel().getSelectedItem();
             String args = "";
-            args = ksiazkaDoZmiany.getISBN();
+            args = bookDoZmiany.getISBN();
             BigDecimal price = BigDecimal.valueOf(Float.valueOf(priceTxt.getText()));
             execProcChangePrice(price, args);
             searchField.setText("");
             priceTxt.setText("");
             readBooks("");
-            addToTableBooks(books);
+            addToTableBooks();
 
             changePrice.setVisible(true);
             newPriceLabel.setVisible(false);
             priceTxt.setVisible(false);
             confirmPrice.setVisible(false);
 
+            showSuccesDialog();
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText(null);
-            alert.setContentText("Coś poszło nie tak!");
-
-            alert.showAndWait();
+            showErrorDialog();
         }
     }
 
     @FXML
-    void changeStatusClicked(ActionEvent event) {
-
+    void refreshBooksClicked(ActionEvent event) {
+        readBooks("");
+        addToTableBooks();
+        readAuthors();
+        addAuthorsToTable();
+        readPH();
+        addPHToTable();
     }
-
 
     @FXML
     void deleteBookClicked(ActionEvent event) {
@@ -321,20 +460,16 @@ public class PracownikController {
         alert.setContentText("Jesteś pewien?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            Ksiazka ksiazkaDoUsuniecia = tableBooks.getSelectionModel().getSelectedItem();
+        if (result.get() == ButtonType.OK) {
+            Book bookDoUsuniecia = tableBooks.getSelectionModel().getSelectedItem();
             try {
-
-
-                execDeteleBook(ksiazkaDoUsuniecia.getISBN());
+                execDeteleBook(bookDoUsuniecia.getISBN());
+                readBooks("");
+                addToTableBooks();
+                showSuccesDialog();
             } catch (Exception e) {
                 e.printStackTrace();
-                Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                alert2.setTitle("Błąd");
-                alert2.setHeaderText(null);
-                alert2.setContentText("Coś poszło nie tak!");
-
-                alert2.showAndWait();
+                showErrorDialog();
             }
         } else {
             alert.close();
@@ -342,94 +477,119 @@ public class PracownikController {
 
     }
 
-    private String connectionUrl;
-    private ArrayList<Ksiazka> books = new ArrayList<>();
-    private ArrayList<Order> orders = new ArrayList<>();
-    private ArrayList<String> gatuneks=new ArrayList<>();
+    @FXML
+    void refreshOrderClicked(ActionEvent event) {
+        readBooks("");
+        addToTableBooks();
+        readOrders("wszystkie");
+        addToTableOrders();
+    }
 
     @FXML
-    void initialize() {
-        connect("pracownik", "pracownik");
-        readBooks("");
-        readOrders("wszystkie");
-        statsChoice.setItems(status);
-        statsChoice.setValue("wszystkie");
-        newStat.setItems(newStatus);
-        newStat.setValue("zrealizowane");
-        addToTableBooks(books);
-        addToTableOrders(orders);
+    void addElementClicked(ActionEvent event) {
 
-        namePHTxt.setDisable(true);
-        addressTxt.setDisable(true);
-        telTxt.setDisable(true);
-        idWydTxt.setDisable(false);
+        try {
 
-        firstNameTxt.setDisable(true);
-        nameTxt.setDisable(true);
-        idAutTxt.setDisable(false);
+            execAddElemOfOrder(Integer.valueOf(nrZamTxt.getText()), isbnZamTxt.getText(), Integer.valueOf(iloscTxt.getText()));
+            showSuccesDialog();
+            isbnZamTxt.setText("");
+            iloscTxt.setText("");
 
-       ObservableList<String> types =
-                FXCollections.observableArrayList();
-       readTypes();
-       types.addAll(gatuneks);
-       typeBox.setItems(types);
-       typeBox.setValue("krymiał");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog();
+        }
+    }
 
-
-        statsChoice.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) ->
-                {
-                    readOrders(statsChoice.getValue());
-                    addToTableOrders(orders);
-                });
-
-
-        searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) ->
-        {
-            readBooks(newValue);
-            addToTableBooks(books);
-        });
-
-        newAuthor.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) ->
-        {
-            if (newValue) {
-                firstNameTxt.setDisable(false);
-                nameTxt.setDisable(false);
-                idAutTxt.setDisable(true);
-            } else{
-                firstNameTxt.setDisable(true);
-                nameTxt.setDisable(true);
-                idAutTxt.setDisable(false);
+    @FXML
+    void addOrderClicked(ActionEvent event) {
+        try {
+            if (nowyKlientBox.isSelected()) {
+                execAddOrderNewClient(nipTxt.getText(), realizatorTxt.getText(), dataTxt.getText(), imieKlientaTxt.getText(), nazwiskoKlientaTxt.getText(), addressKlientaTxt.getText());
+            } else {
+                execAddOrder(nipTxt.getText(), realizatorTxt.getText(), dataTxt.getText());
             }
 
-            readBooks("");
-            addToTableBooks(books);
-        });
+            try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
+                String SQL = "SELECT * FROM dbo.ZAMOWIENIA";
+                ResultSet rs = stmt.executeQuery(SQL);
+                // rs.last();
+                while (rs.next()) {
 
-        newPH.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) ->
-        {
-            if (!newValue){
-                namePHTxt.setDisable(true);
-                addressTxt.setDisable(true);
-                telTxt.setDisable(true);
-                idWydTxt.setDisable(false);
-            } else{
-                namePHTxt.setDisable(false);
-                addressTxt.setDisable(false);
-                telTxt.setDisable(false);
-                idWydTxt.setDisable(true);
+                    nrZamTxt.setText(rs.getString("NR_ZAM"));
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new IllegalArgumentException("Wrong password");
+
             }
+            showSuccesDialog();
+            nipTxt.setText("");
+            realizatorTxt.setText("");
+            dataTxt.setText("");
+            imieKlientaTxt.setText("");
+            nazwiskoKlientaTxt.setText("");
+            addressKlientaTxt.setText("");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog();
+        }
+    }
+
+    @FXML
+    void changeStatusClicked(ActionEvent event) {
+        try {
+            Order order = zamTab.getSelectionModel().getSelectedItem();
+            execChangeStat(Integer.valueOf(order.getOrder()), newStat.getValue());
+            showSuccesDialog();
+            readOrders("wszystkie");
+            addToTableOrders();
             readBooks("");
-            addToTableBooks(books);
-        });
+            addToTableBooks();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog();
+        }
+    }
 
-        newPriceLabel.setVisible(false);
-        priceTxt.setVisible(false);
-        confirmPrice.setVisible(false);
+    @FXML
+    void newAmountClicked(ActionEvent event) {
+        try {
+
+            execNewAmount(isbnMoreTxt.getText(), Integer.valueOf(amountNewTxt.getText()));
+            showSuccesDialog();
+            readBooks("");
+            addToTableBooks();
+            isbnAutTxt.setText("");
+            amountNewTxt.setText("");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog();
+        }
 
     }
+
+
+    @FXML
+    void addTypeClicked(ActionEvent event) {
+
+        try {
+            execAddType(newTypeTxt.getText());
+            readTypes();
+            types.addAll(gatuneks);
+            typeBox.setItems(types);
+            newTypeTxt.setText("");
+            typeBox.setValue("biografia");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog();
+        }
+
+    }
+
 
     private void connect(String login, String password) {
         connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + login + ";password=" + password;
@@ -440,21 +600,21 @@ public class PracownikController {
             String SQL = "SELECT * FROM dbo.KSIAZKI_AUT_WYD";
 
             ResultSet rs = stmt.executeQuery(SQL);
-            Ksiazka ksiazka;
+            Book book;
             // Iterate through the data in the result set and display it.
             while (rs.next()) {
-                ksiazka = new Ksiazka(rs.getString("ISBN"), rs.getString("AUTORZY"), rs.getString("TYTUL"),
+                book = new Book(rs.getString("ISBN"), rs.getString("AUTORZY"), rs.getString("TYTUL"),
                         String.format("%.2f", Double.valueOf(rs.getString("CENA"))), rs.getString("ilosc"), rs.getString("GATUNEK"),
                         rs.getString("DLUGOSC"), rs.getString("WYDAWNOCTWO"), rs.getString("ROK_WYDANIA"));
 
                 if (search == "") {
-                    books.add(ksiazka);
+                    books.add(book);
                 } else {
                     String autorzy = rs.getString("AUTORZY");
                     String tytul = rs.getString("TYTUL");
 
                     if (autorzy.toLowerCase().contains(search.toLowerCase()) || tytul.toLowerCase().contains(search.toLowerCase())) {
-                        books.add(ksiazka);
+                        books.add(book);
                     }
                 }
             }
@@ -498,7 +658,7 @@ public class PracownikController {
 
     }
 
-    private void readTypes(){
+    private void readTypes() {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
 
             String SQL = "";
@@ -507,7 +667,7 @@ public class PracownikController {
             Order order;
             // Iterate through the data in the result set and display it.
             while (rs.next()) {
-                Gatunek gatunek=new Gatunek(rs.getString("NAZWA"));
+                Gatunek gatunek = new Gatunek(rs.getString("NAZWA"));
 
                 gatuneks.add(gatunek.getNazwa());
             }
@@ -518,10 +678,10 @@ public class PracownikController {
         }
     }
 
-    private void addToTableBooks(ArrayList books) {
+    private void addToTableBooks() {
 
         tableBooks.getItems().removeAll(tableBooks.getItems());
-        ObservableList<Ksiazka> dataBooks = FXCollections.observableArrayList();
+        ObservableList<Book> dataBooks = FXCollections.observableArrayList();
         dataBooks.addAll(books);
         books.clear();
 
@@ -537,7 +697,7 @@ public class PracownikController {
         tableBooks.setItems(dataBooks);
     }
 
-    private void addToTableOrders(ArrayList orders) {
+    private void addToTableOrders() {
 
         zamTab.getItems().removeAll(zamTab.getItems());
 
@@ -559,7 +719,6 @@ public class PracownikController {
 
     }
 
-    //kk
     private void execDeteleBook(String isbn) throws SQLException {
 
         Connection con = DriverManager.getConnection(connectionUrl);
@@ -593,28 +752,27 @@ public class PracownikController {
 
     }
 
-    //kk
     private void execAddBook(String isbn, String tytul, int dlugosc, BigDecimal cena, String gatunek, int ID, String rok, int ilosc) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
 
         SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
-                .prepareCall("{call dbo.DODAJ_KSIAZKE(?,?,?,?,?,?,?,?)}");
+                .prepareCall("{call dbo.DODAJ_KSIAZKE(?, ?, ?, ?, ?, ?, ?, ?)}");
 
-        cstmt.setString("ISBN", isbn);
-        cstmt.setString("TYTUL", tytul);
-        cstmt.setInt("DLUGOSC", dlugosc);
-        cstmt.setSmallMoney("CENA", cena);
-        cstmt.setString("GATUNEK", gatunek);
-        cstmt.setInt("ID_WYD", ID);
-        cstmt.setString("ROK_WYD", rok);
-        cstmt.setInt("ilosc", ilosc);
+        cstmt.setString(1, isbn);
+        cstmt.setString(2, tytul);
+        cstmt.setInt(3, dlugosc);
+        cstmt.setSmallMoney(4, cena);
+        cstmt.setString(5, gatunek);
+        cstmt.setInt(6, ID);
+        cstmt.setString(7, rok);
+        cstmt.setInt(8, ilosc);
 
         cstmt.execute();
         System.out.println("Book added");
     }
 
-    //kk
+
     private void execAddBookAddPH(String isbn, String tytul, int dlugosc, BigDecimal cena, String gatunek, String nazwa, String adres, String tel, String rok, int ilosc) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -637,22 +795,22 @@ public class PracownikController {
         System.out.println("Book and publishing house added.");
     }
 
-    //kk
+
     private void execAddAuthorToBook(String isbn, int id) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
 
         SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
-                .prepareCall("{call dbo.DODAJ_AUT_DO_KSIAZKI(?)}");
+                .prepareCall("{call dbo.DODAJ_AUT_DO_KSIAZKI(?,?)}");
 
-        cstmt.setString("ISBN", isbn);
-        cstmt.setInt("ID_AUT", id);
+        cstmt.setString(1, isbn);
+        cstmt.setInt(2, id);
 
         cstmt.execute();
         System.out.println("Author to book added");
     }
 
-    //kk
+
     private void execAddNewAuthorToBook(String isbn, String imie, String nazwisko) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -668,33 +826,41 @@ public class PracownikController {
         System.out.println("New author to book added.");
     }
 
-    //kk
-    private void execAddOrder(String nip, String realizator,String data) throws SQLException {
+
+    private void execAddOrder(String nip, String realizator, String data) throws SQLException, ParseException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = sdf1.parse(data);
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
         SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
                 .prepareCall("{call dbo.NOWE_ZAM(?,?,?)}");
 
+
         cstmt.setString("NIP", nip);
         cstmt.setString("REALIZATOR", realizator);
-        cstmt.setDate("DATE", Date.valueOf(data));
+        cstmt.setDate("DATA", sqlDate);
 
         cstmt.execute();
         System.out.println("New order added.");
     }
 
-    //kk
-    private void execAddOrderNewClient(String nip, String realizator,String data,String imie,String nazwisko,String adres) throws SQLException {
+
+    private void execAddOrderNewClient(String nip, String realizator, String data, String imie, String nazwisko, String adres) throws SQLException, ParseException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = sdf1.parse(data);
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
         SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
                 .prepareCall("{call dbo.NOWE_ZAM_NOWY_KLI(?,?,?,?,?,?)}");
 
         cstmt.setString("NIP", nip);
         cstmt.setString("REALIZATOR", realizator);
-        cstmt.setDate("DATE", Date.valueOf(data));
+        cstmt.setDate("DATA", sqlDate);
         cstmt.setString("IMIE", imie);
         cstmt.setString("NAZWISKO", nazwisko);
         cstmt.setString("ADRES", adres);
@@ -703,13 +869,13 @@ public class PracownikController {
         System.out.println("New order and client added.");
     }
 
-    //kk
+
     private void execAddElemOfOrder(int nr, String isbn, int ilosc) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
 
         SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
-                .prepareCall("{call dbo.DODAJ_ELEM_ZAM(?)}");
+                .prepareCall("{call dbo.DODAJ_ELEM_ZAM(?,?,?)}");
 
         cstmt.setInt("NR_ZAM", nr);
         cstmt.setString("ISBN", isbn);
@@ -719,7 +885,128 @@ public class PracownikController {
         System.out.println("ELement of order added");
     }
 
+    private void execAddType(String nazwa) throws SQLException {
+        Connection con = DriverManager.getConnection(connectionUrl);
+        Statement stmt = con.createStatement();
+
+        SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
+                .prepareCall("{call dbo.DODAJ_GAT(?)}");
+
+        cstmt.setString(1, nazwa);
+        cstmt.execute();
+        System.out.println("Type added");
+    }
+
+    private void execChangeStat(int nrZam, String status) throws SQLException {
+        Connection con = DriverManager.getConnection(connectionUrl);
+        Statement stmt = con.createStatement();
+
+        SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
+                .prepareCall("{call dbo.ZMIEN_STATUS(?, ?)}");
 
 
+        cstmt.setInt(1, nrZam);
+        cstmt.setString(2, status);
+
+        cstmt.execute();
+        System.out.println("Status changed");
+    }
+
+    private void execNewAmount(String isbn, int amount) throws SQLException {
+        Connection con = DriverManager.getConnection(connectionUrl);
+        Statement stmt = con.createStatement();
+
+        SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
+                .prepareCall("{call dbo.ILOSC_KSIAZEK(?, ?)}");
+
+
+        cstmt.setString(1, isbn);
+        cstmt.setInt(2, amount);
+
+        cstmt.execute();
+        System.out.println("Amount of books changed");
+
+    }
+
+    private void readAuthors() {
+        try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
+            String SQL = "SELECT * FROM dbo.AUTORZY";
+
+            ResultSet rs = stmt.executeQuery(SQL);
+            Author author;
+            // Iterate through the data in the result set and display it.
+            while (rs.next()) {
+                author = new Author(rs.getString("ID_AUT"), rs.getString("IMIĘ"), rs.getString("NAZWISKO"));
+                authors.add(author);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Wrong password");
+
+        }
+    }
+
+    private void addAuthorsToTable() {
+        authorsTable.getItems().removeAll(authorsTable.getItems());
+        ObservableList<Author> dataAuthors = FXCollections.observableArrayList();
+        dataAuthors.addAll(authors);
+        authors.clear();
+
+        idAutCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        forstnameAutCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        nameAutCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+
+        authorsTable.setItems(dataAuthors);
+    }
+
+    private void readPH() {
+        try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
+            String SQL = "SELECT * FROM dbo.WYDAWNICTWA";
+
+            ResultSet rs = stmt.executeQuery(SQL);
+            PublishingHouse ph;
+            // Iterate through the data in the result set and display it.
+            while (rs.next()) {
+                ph = new PublishingHouse(rs.getString("ID_WYD"), rs.getString("NAZWA"), rs.getString("ADRES"), rs.getString("TEL"));
+                phouses.add(ph);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Wrong password");
+
+        }
+    }
+
+    private void addPHToTable() {
+
+        phTable.getItems().removeAll(phTable.getItems());
+        ObservableList<PublishingHouse> dataPh = FXCollections.observableArrayList();
+        dataPh.addAll(phouses);
+        phouses.clear();
+
+        idPhCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        namePhCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        addressPhCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        telPhCol.setCellValueFactory(new PropertyValueFactory<>("tel"));
+
+        phTable.setItems(dataPh);
+
+    }
+
+    private void showErrorDialog() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText("Ojej!");
+        alert.setContentText("Coś poszło nie tak!");
+        alert.showAndWait();
+    }
+
+    private void showSuccesDialog() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sukces");
+        alert.setHeaderText("Brawo!");
+        alert.setContentText("Udało się!");
+        alert.showAndWait();
+    }
 }
 

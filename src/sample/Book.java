@@ -1,6 +1,6 @@
 package sample;
 
-public class Ksiazka {
+public class Book {
 
     private String ISBN;
     private String authors;
@@ -12,7 +12,7 @@ public class Ksiazka {
     private String phouse;
     private String year;
 
-    public Ksiazka() {
+    public Book() {
     }
 
     public String getISBN() {
@@ -87,7 +87,7 @@ public class Ksiazka {
         this.year = year;
     }
 
-    public Ksiazka(String ISBN, String authors, String title, String price, String amount, String type, String length, String pHouse, String year) {
+    public Book(String ISBN, String authors, String title, String price, String amount, String type, String length, String pHouse, String year) {
         this.ISBN = ISBN;
         this.authors = authors;
         this.title = title;

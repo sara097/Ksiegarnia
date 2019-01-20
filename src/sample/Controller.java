@@ -18,7 +18,7 @@ public class Controller {
     private TableColumn<?, ?> isbnCol;
 
     @FXML
-    private TableView<Ksiazka> table;
+    private TableView<Book> table;
 
     @FXML
     private TableColumn<?, ?> autCol;
@@ -48,12 +48,13 @@ public class Controller {
     private TextField sprawdz;
 
 
-    private ArrayList<Ksiazka> books = new ArrayList<>();
+    private ArrayList<Book> books = new ArrayList<>();
+    private String connectionUrl = "";
 
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
 
-        connect("klient", "");
+        connect();
         readBoooks("");
         addToTable();
 
@@ -65,51 +66,47 @@ public class Controller {
 
     }
 
-    String connectionUrl="";
-    private void connect(String login, String password) {
 
-        connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + login + ";password=" + password;
-
-
+    private void connect() {
+        connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + "klient" + ";password=" + "";
     }
 
-    private void readBoooks(String search){
+    private void readBoooks(String search) {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
-        String SQL = "SELECT * FROM dbo.KSIAZKI_AUT_WYD";
-        ResultSet rs = stmt.executeQuery(SQL);
-        Ksiazka ksiazka;
-        // Iterate through the data in the result set and display it.
-        while (rs.next()) {
+            String SQL = "SELECT * FROM dbo.KSIAZKI_AUT_WYD";
+            ResultSet rs = stmt.executeQuery(SQL);
+            Book book;
+            // Iterate through the data in the result set and display it.
+            while (rs.next()) {
 
-            ksiazka = new Ksiazka(rs.getString("ISBN"), rs.getString("AUTORZY"), rs.getString("TYTUL"),
-                    String.format("%.2f", Double.valueOf(rs.getString("CENA"))), rs.getString("ilosc"), rs.getString("GATUNEK"),
-                    rs.getString("DLUGOSC"), rs.getString("WYDAWNOCTWO"), rs.getString("ROK_WYDANIA"));
+                book = new Book(rs.getString("ISBN"), rs.getString("AUTORZY"), rs.getString("TYTUL"),
+                        String.format("%.2f", Double.valueOf(rs.getString("CENA"))), rs.getString("ilosc"), rs.getString("GATUNEK"),
+                        rs.getString("DLUGOSC"), rs.getString("WYDAWNOCTWO"), rs.getString("ROK_WYDANIA"));
 
-            if(search==""){
-                books.add(ksiazka);
-            } else{
-                String autorzy=rs.getString("AUTORZY");
-                String tytul=rs.getString("TYTUL");
+                if (search == "") {
+                    books.add(book);
+                } else {
+                    String autorzy = rs.getString("AUTORZY");
+                    String tytul = rs.getString("TYTUL");
 
-                if(autorzy.toLowerCase().contains(search.toLowerCase())||tytul.toLowerCase().contains(search.toLowerCase())){
-                    books.add(ksiazka);
+                    if (autorzy.toLowerCase().contains(search.toLowerCase()) || tytul.toLowerCase().contains(search.toLowerCase())) {
+                        books.add(book);
+                    }
                 }
+
+
             }
-
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Wrong password");
 
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        throw new IllegalArgumentException("Wrong password");
-
-    }
     }
 
     private void addToTable() {
 
         table.getItems().removeAll(table.getItems());
-        ObservableList<Ksiazka> data = FXCollections.observableArrayList();
+        ObservableList<Book> data = FXCollections.observableArrayList();
         data.addAll(books);
         books.clear();
 

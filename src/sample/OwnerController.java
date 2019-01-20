@@ -36,7 +36,7 @@ public class OwnerController {
             );
 
     @FXML
-    private TableView<Ksiazka> table;
+    private TableView<Book> table;
 
     @FXML
     private TableColumn<?, ?> isbnCol;
@@ -91,9 +91,6 @@ public class OwnerController {
 
     @FXML
     private CheckBox oldWorkers;
-
-    @FXML
-    private Button relWBtn;
 
     @FXML
     private TableView<Order> zamTab;
@@ -188,7 +185,7 @@ public class OwnerController {
 
     private String connectionUrl;
 
-    private ArrayList<Ksiazka> books = new ArrayList<>();
+    private ArrayList<Book> books = new ArrayList<>();
     private ArrayList<Employee> employees = new ArrayList<>();
     private ArrayList<Order> orders = new ArrayList<>();
 
@@ -261,9 +258,9 @@ public class OwnerController {
 
         try {
 
-            Ksiazka ksiazkaDoZmiany = table.getSelectionModel().getSelectedItem();
+            Book bookDoZmiany = table.getSelectionModel().getSelectedItem();
             String args = "";
-            args = ksiazkaDoZmiany.getISBN();
+            args = bookDoZmiany.getISBN();
             BigDecimal price = BigDecimal.valueOf(Float.valueOf(priceTxt.getText()));
             execProcChangePrice(price, args);
             searchField.setText("");
@@ -275,14 +272,10 @@ public class OwnerController {
             priceTxt.setVisible(false);
             confirmPrice.setVisible(false);
 
+            showSuccesDialog();
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText(null);
-            alert.setContentText("Coś poszło nie tak!");
-
-            alert.showAndWait();
+           showErrorDialog();
         }
 
 
@@ -348,14 +341,10 @@ public class OwnerController {
             readEmployees(readAll);
             addToTableEmplyees(employees);
 
-
+            showSuccesDialog();
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText(null);
-            alert.setContentText("Coś poszło nie tak!");
-            alert.showAndWait();
+            showErrorDialog();
         }
     }
 
@@ -386,13 +375,11 @@ public class OwnerController {
             headerLabel.setVisible(false);
             addWBtn.setVisible(true);
 
+            showSuccesDialog();
+
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText(null);
-            alert.setContentText("Coś poszło nie tak!");
-            alert.showAndWait();
+           showErrorDialog();
         }
 
 
@@ -460,21 +447,21 @@ public class OwnerController {
             String SQL = "SELECT * FROM dbo.KSIAZKI_AUT_WYD";
 
             ResultSet rs = stmt.executeQuery(SQL);
-            Ksiazka ksiazka;
+            Book book;
             // Iterate through the data in the result set and display it.
             while (rs.next()) {
-                ksiazka = new Ksiazka(rs.getString("ISBN"), rs.getString("AUTORZY"), rs.getString("TYTUL"),
+                book = new Book(rs.getString("ISBN"), rs.getString("AUTORZY"), rs.getString("TYTUL"),
                         String.format("%.2f", Double.valueOf(rs.getString("CENA"))), rs.getString("ilosc"), rs.getString("GATUNEK"),
                         rs.getString("DLUGOSC"), rs.getString("WYDAWNOCTWO"), rs.getString("ROK_WYDANIA"));
 
                 if (search == "") {
-                    books.add(ksiazka);
+                    books.add(book);
                 } else {
                     String autorzy = rs.getString("AUTORZY");
                     String tytul = rs.getString("TYTUL");
 
                     if (autorzy.toLowerCase().contains(search.toLowerCase()) || tytul.toLowerCase().contains(search.toLowerCase())) {
-                        books.add(ksiazka);
+                        books.add(book);
                     }
                 }
             }
@@ -514,7 +501,6 @@ public class OwnerController {
 
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
 
-
             String SQL = "";
 
             if (status.equals("wszystkie")) SQL = "SELECT * FROM dbo.ZAMOWIENIE_WIDOK";
@@ -546,7 +532,7 @@ public class OwnerController {
     private void addToTableBooks(ArrayList books) {
 
         table.getItems().removeAll(table.getItems());
-        ObservableList<Ksiazka> dataBooks = FXCollections.observableArrayList();
+        ObservableList<Book> dataBooks = FXCollections.observableArrayList();
         dataBooks.addAll(books);
         books.clear();
 
@@ -599,6 +585,21 @@ public class OwnerController {
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
         zamTab.setItems(dataOrders);
 
+    }
+
+    private void showErrorDialog(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText("Ojej!");
+        alert.setContentText("Coś poszło nie tak!");
+        alert.showAndWait();
+    }
+
+    private void showSuccesDialog(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sukces");
+        alert.setContentText("Udało się!");
+        alert.showAndWait();
     }
 
 }

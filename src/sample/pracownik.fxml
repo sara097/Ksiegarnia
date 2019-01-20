@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="859.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.PracownikController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="668.0" prefWidth="970.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.PracownikController">
   <tabs>
     <Tab text="Przeglądaj książki">
          <content>
@@ -67,15 +67,15 @@
                   <TextField fx:id="namePHTxt" layoutX="280.0" layoutY="122.0" />
                   <TextField fx:id="addressTxt" layoutX="280.0" layoutY="178.0" />
                   <TextField fx:id="telTxt" layoutX="280.0" layoutY="236.0" />
-                  <Separator layoutX="442.0" layoutY="-3.0" orientation="VERTICAL" prefHeight="555.0" prefWidth="13.0" />
-                  <TextField fx:id="isbnAutTxt" layoutX="559.0" layoutY="86.0" />
-                  <TextField fx:id="idAutTxt" layoutX="462.0" layoutY="178.0" />
+                  <Separator layoutX="459.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="646.0" prefWidth="13.0" />
+                  <TextField fx:id="isbnAutTxt" layoutX="620.0" layoutY="86.0" />
+                  <TextField fx:id="idAutTxt" layoutX="517.0" layoutY="177.0" />
                   <Button fx:id="addBook" layoutX="187.0" layoutY="495.0" mnemonicParsing="false" onAction="#addBookClicked" text="Dodaj książkę" />
-                  <Button fx:id="authorToBookAdded" layoutX="564.0" layoutY="377.0" mnemonicParsing="false" onAction="#addAuthorToBookClicked" text="Dodaj autora do książki" />
+                  <Button fx:id="authorToBookAdded" layoutX="624.0" layoutY="377.0" mnemonicParsing="false" onAction="#addAuthorToBookClicked" text="Dodaj autora do książki" />
                   <CheckBox fx:id="newPH" layoutX="292.0" layoutY="51.0" mnemonicParsing="false" text="Nowe wydawnictwo" />
-                  <CheckBox fx:id="newAuthor" layoutX="686.0" layoutY="151.0" mnemonicParsing="false" text="Nowy autor" />
-                  <TextField fx:id="firstNameTxt" layoutX="658.0" layoutY="211.0" />
-                  <TextField fx:id="nameTxt" layoutX="658.0" layoutY="262.0" />
+                  <CheckBox fx:id="newAuthor" layoutX="792.0" layoutY="149.0" mnemonicParsing="false" text="Nowy autor" />
+                  <TextField fx:id="firstNameTxt" layoutX="760.0" layoutY="212.0" />
+                  <TextField fx:id="nameTxt" layoutX="760.0" layoutY="263.0" />
                   <Label layoutX="120.0" layoutY="50.0" text="ISBN" />
                   <Label layoutX="178.0" layoutY="9.0" text="Dodaj książkę">
                      <font>
@@ -87,21 +87,22 @@
                   <Label layoutX="120.0" layoutY="207.0" text="Cena" />
                   <Label layoutX="109.0" layoutY="254.0" text="Gatunek" />
                   <Label layoutX="87.0" layoutY="311.0" text="ID Wydawnictwa" />
-                  <Label layoutX="620.0" layoutY="59.0" text="ISBN" />
+                  <Label layoutX="681.0" layoutY="60.0" text="ISBN" />
                   <Label layoutX="99.0" layoutY="360.0" text="Rok wydania" />
                   <Label layoutX="120.0" layoutY="414.0" text="Ilość" />
                   <Label layoutX="302.0" layoutY="98.0" text="Nazwa wydawnictwa" />
                   <Label layoutX="338.0" layoutY="157.0" text="Adres" />
                   <Label layoutX="333.0" layoutY="215.0" text="Telefon" />
-                  <Label layoutX="550.0" layoutY="12.0" text="Dodaj autora do książki">
+                  <Label layoutX="611.0" layoutY="12.0" text="Dodaj autora do książki">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="511.0" layoutY="151.0" text="ID Autora" />
-                  <Label layoutX="718.0" layoutY="182.0" text="Imię" />
-                  <Label layoutX="703.0" layoutY="240.0" text="Nazwisko" />
+                  <Label layoutX="566.0" layoutY="149.0" text="ID Autora" />
+                  <Label layoutX="823.0" layoutY="182.0" text="Imię" />
+                  <Label layoutX="809.0" layoutY="240.0" text="Nazwisko" />
                   <ComboBox fx:id="typeBox" layoutX="57.0" layoutY="275.0" prefWidth="150.0" />
+                  <Button fx:id="refreshBooks" layoutX="417.0" layoutY="563.0" mnemonicParsing="false" onAction="#refreshBooksClicked" text="Odśwież tabelę" />
                </children></Pane>
          </content>
     </Tab>
@@ -109,30 +110,37 @@
          <content>
             <Pane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <TextField fx:id="nipTxt" layoutX="89.0" layoutY="100.0" />
-                  <TextField layoutX="89.0" layoutY="150.0" />
-                  <TextField layoutX="89.0" layoutY="201.0" />
-                  <TextField fx:id="imieKlientaTxt" layoutX="88.0" layoutY="297.0" />
-                  <TextField fx:id="nazwiskoKlientaTxt" layoutX="89.0" layoutY="352.0" />
-                  <TextField fx:id="addressKlientaTxt" layoutX="88.0" layoutY="410.0" />
-                  <CheckBox fx:id="nowyKlientBox" layoutX="120.0" layoutY="241.0" mnemonicParsing="false" text="Nowy klient" />
-                  <Separator layoutX="328.0" orientation="VERTICAL" prefHeight="548.0" prefWidth="24.0" />
-                  <TextField fx:id="nrZamTxt" layoutX="499.0" layoutY="88.0" />
-                  <TextField fx:id="isbnZamTxt" layoutX="499.0" layoutY="138.0" />
-                  <TextField fx:id="iloscTxt" layoutX="499.0" layoutY="189.0" />
-                  <Button fx:id="addNewOrderBtn" layoutX="91.0" layoutY="457.0" mnemonicParsing="false" onAction="#addOrderClicked" text="Dodaj nowe zamówienia" />
-                  <Button fx:id="addElementBtn" layoutX="492.0" layoutY="246.0" mnemonicParsing="false" onAction="#addElementClicked" text="Dodaj element zamówienia" />
-                  <Label layoutX="114.0" layoutY="37.0" text="Dodaj zamówienie" />
-                  <Label layoutX="501.0" layoutY="37.0" text="Dodaj element zamówienia" />
-                  <Label layoutX="149.0" layoutY="80.0" text="NIP" />
-                  <Label fx:id="realizatorTxt" layoutX="132.0" layoutY="130.0" text="Realizator" />
-                  <Label fx:id="dataTxt" layoutX="146.0" layoutY="181.0" text="Data" />
-                  <Label layoutX="149.0" layoutY="274.0" text="Imię" />
-                  <Label layoutX="133.0" layoutY="329.0" text="Nazwisko" />
-                  <Label layoutX="149.0" layoutY="385.0" text="Adres" />
-                  <Label layoutX="522.0" layoutY="63.0" text="Numer zamówienia" />
-                  <Label layoutX="559.0" layoutY="117.0" text="ISBN" />
-                  <Label layoutX="559.0" layoutY="167.0" text="Ilość" />
+                  <TextField fx:id="nipTxt" layoutX="163.0" layoutY="105.0" />
+                  <TextField fx:id="realizatorTxt" layoutX="162.0" layoutY="150.0" />
+                  <TextField fx:id="dataTxt" layoutX="163.0" layoutY="199.0" />
+                  <TextField fx:id="imieKlientaTxt" layoutX="162.0" layoutY="291.0" />
+                  <TextField fx:id="nazwiskoKlientaTxt" layoutX="162.0" layoutY="350.0" />
+                  <TextField fx:id="addressKlientaTxt" layoutX="163.0" layoutY="415.0" />
+                  <CheckBox fx:id="nowyKlientBox" layoutX="182.0" layoutY="242.0" mnemonicParsing="false" text="Nowy klient" />
+                  <Separator layoutX="422.0" orientation="VERTICAL" prefHeight="646.0" prefWidth="24.0" />
+                  <TextField fx:id="nrZamTxt" layoutX="645.0" layoutY="117.0" />
+                  <TextField fx:id="isbnZamTxt" layoutX="644.0" layoutY="186.0" />
+                  <TextField fx:id="iloscTxt" layoutX="645.0" layoutY="262.0" />
+                  <Button fx:id="addNewOrderBtn" layoutX="164.0" layoutY="455.0" mnemonicParsing="false" onAction="#addOrderClicked" text="Dodaj nowe zamówienia" />
+                  <Button fx:id="addElementBtn" layoutX="639.0" layoutY="325.0" mnemonicParsing="false" onAction="#addElementClicked" text="Dodaj element zamówienia" />
+                  <Label layoutX="163.0" layoutY="41.0" text="Dodaj zamówienie">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font></Label>
+                  <Label layoutX="598.0" layoutY="40.0" text="Dodaj element zamówienia">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font></Label>
+                  <Label layoutX="227.0" layoutY="84.0" text="NIP" />
+                  <Label layoutX="210.0" layoutY="134.0" text="Realizator" />
+                  <Label layoutX="181.0" layoutY="178.0" text="Data (DD-MM-YYYY)" />
+                  <Label layoutX="225.0" layoutY="266.0" text="Imię" />
+                  <Label layoutX="211.0" layoutY="329.0" text="Nazwisko" />
+                  <Label layoutX="221.0" layoutY="386.0" text="Adres" />
+                  <Label layoutX="668.0" layoutY="92.0" text="Numer zamówienia" />
+                  <Label layoutX="707.0" layoutY="154.0" text="ISBN" />
+                  <Label layoutX="707.0" layoutY="233.0" text="Ilość" />
+                  <Button fx:id="refreshOrderBtn" layoutX="374.0" layoutY="571.0" mnemonicParsing="false" onAction="#refreshOrderClicked" text="Odśwież tabelę" />
                </children>
             </Pane>
          </content>
@@ -172,6 +180,72 @@
                      </children>
                   </HBox>
                </top>
+            </BorderPane>
+         </content>
+      </Tab>
+      <Tab text="Inne ustawienia">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <TableView fx:id="authorsTable" prefHeight="548.0" prefWidth="282.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn fx:id="idAutCol" prefWidth="75.0" text="ID_Autora" />
+                      <TableColumn fx:id="forstnameAutCol" prefWidth="95.20001220703125" text="Imię" />
+                        <TableColumn fx:id="nameAutCol" prefWidth="110.40001525878904" text="Nazwisko" />
+                    </columns>
+                  </TableView>
+               </left>
+               <right>
+                  <TableView fx:id="phTable" prefHeight="574.0" prefWidth="410.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn fx:id="idPhCol" prefWidth="75.0" text="ID wyd" />
+                      <TableColumn fx:id="namePhCol" prefWidth="111.199951171875" text="Nazwa" />
+                        <TableColumn fx:id="addressPhCol" prefWidth="99.20001220703125" text="Adres" />
+                        <TableColumn fx:id="telPhCol" prefWidth="111.199951171875" text="Telefon" />
+                    </columns>
+                  </TableView>
+               </right>
+               <top>
+                  <Pane prefHeight="63.0" prefWidth="859.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="84.0" layoutY="17.0" text="Autorzy">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="713.0" layoutY="17.0" text="Wydawnictwa">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </top>
+               <center>
+                  <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="newTypeTxt" layoutX="65.0" layoutY="74.0" />
+                        <TextField fx:id="isbnMoreTxt" layoutX="64.0" layoutY="282.0" />
+                        <TextField fx:id="amountNewTxt" layoutX="65.0" layoutY="343.0" />
+                        <Button fx:id="addTypeBtn" layoutX="113.0" layoutY="114.0" mnemonicParsing="false" onAction="#addTypeClicked" text="Dodaj" />
+                        <Button fx:id="newAmountBtn" layoutX="113.0" layoutY="402.0" mnemonicParsing="false" onAction="#newAmountClicked" text="Zmień" />
+                        <Label layoutX="87.0" layoutY="14.0" text="Dodaj nowy gatunek">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="125.0" layoutY="47.0" text="Nazwa" />
+                        <Label layoutX="125.0" layoutY="256.0" text="ISBN" />
+                        <Label layoutX="65.0" layoutY="317.0" text="Ilość domówionych książek" />
+                        <Label layoutX="80.0" layoutY="237.0" text="Zmień ilość ksiażek">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutX="-3.0" layoutY="184.0" prefHeight="9.0" prefWidth="280.0" />
+                     </children>
+                  </Pane>
+               </center>
             </BorderPane>
          </content>
       </Tab>

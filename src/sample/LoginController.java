@@ -30,9 +30,7 @@ public class LoginController {
     @FXML
    void initialize()  {
         loginBtn.setDisable(true);
-        loginTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginBtn.setDisable(newValue.trim().isEmpty());
-        });
+        loginTxt.textProperty().addListener((observable, oldValue, newValue) -> loginBtn.setDisable(newValue.trim().isEmpty()));
     }
 
     @FXML
@@ -49,20 +47,25 @@ public class LoginController {
     @FXML
     void logInClicked(ActionEvent event) throws IOException {
         try {
-            if (loginTxt.getText().equals("owner")) {
-                connect("owner", passwordTxt.getText());
-                newScene("wlasciciel", "Właściciel");
+            switch (loginTxt.getText()) {
+                case "owner":
+                    connect("owner", passwordTxt.getText());
+                    newScene("wlasciciel", "Właściciel");
 
-            } else if (loginTxt.getText().equals("ksiegowy")) {
-                connect("ksiegowy", passwordTxt.getText());
-                newScene("ksiegowa", "Ksiegowość");
+                    break;
+                case "ksiegowy":
+                    connect("ksiegowy", passwordTxt.getText());
+                    newScene("ksiegowa", "Ksiegowość");
 
-            } else if (loginTxt.getText().equals("pracownik")) {
-                connect("pracownik", passwordTxt.getText());
-                newScene("pracownik", "Pracownik");
+                    break;
+                case "pracownik":
+                    connect("pracownik", passwordTxt.getText());
+                    newScene("pracownik", "Pracownik");
 
-            } else {
-                connect(loginTxt.getText(), passwordTxt.getText());
+                    break;
+                default:
+                    connect(loginTxt.getText(), passwordTxt.getText());
+                    break;
             }
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -75,7 +78,7 @@ public class LoginController {
         }
     }
 
-    public void connect(String login, String password) throws SQLException {
+    private void connect(String login, String password) throws SQLException {
 
         String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + login + ";password=" + password;
         Connection con = null;

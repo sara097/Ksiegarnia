@@ -1,14 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="sample.KsiegowaController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="612.0" prefWidth="885.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="sample.KsiegowaController">
+  <tabs>
+    <Tab text="Książki">
+         <content>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="883.0">
+               <center>
+                  <TableView fx:id="table" prefHeight="474.0" prefWidth="662.0" BorderPane.alignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="isbnCol" prefWidth="125.60000306367874" text="ISBN" />
+                        <TableColumn fx:id="autCol" prefWidth="139.19998931884766" text="Autorzy" />
+                        <TableColumn fx:id="titleCol" minWidth="9.60003662109375" prefWidth="192.0" text="Tytuł" />
+                        <TableColumn fx:id="priceCol" prefWidth="62.399932861328125" text="Cena" />
+                        <TableColumn fx:id="amoutCol" prefWidth="48.0" text="Ilość" />
+                        <TableColumn fx:id="typeCol" prefWidth="78.39996337890625" text="Gatunek" />
+                        <TableColumn fx:id="lengthCol" prefWidth="52.0" text="Długość" />
+                        <TableColumn fx:id="phCol" prefWidth="105.60003662109375" text="Wydawnictwo" />
+                        <TableColumn fx:id="yearCol" prefWidth="80.800048828125" text="Rok wydania" />
+                     </columns>
+                  </TableView>
+               </center>
+               <top>
+                  <Pane prefHeight="126.0" prefWidth="790.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="305.0" layoutY="45.0" text="Przeglądaj książki">
+                           <font>
+                              <Font name="Arial Bold Italic" size="32.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="sprawdz" layoutX="668.0" layoutY="70.0" />
+                        <Label layoutX="711.0" layoutY="45.0" text="Wyszukaj">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </top>
+            </BorderPane>
+         </content>
+    </Tab>
+    <Tab text="Klienci">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <TableView fx:id="cliTable" prefHeight="370.0" prefWidth="670.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn fx:id="nipCol" prefWidth="141.6000518798828" text="NIP" />
+                      <TableColumn fx:id="firstnameCol" minWidth="8.79998779296875" prefWidth="144.00001525878906" text="Imię" />
+                        <TableColumn fx:id="nameCol" prefWidth="156.79998779296875" text="Nazwisko" />
+                        <TableColumn fx:id="addressCol" prefWidth="224.79995727539062" text="Adres" />
+                    </columns>
+                  </TableView>
+               </center>
+               <top>
+                  <Pane prefHeight="117.0" prefWidth="886.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="312.0" layoutY="39.0" text="Przeglądaj klientów">
+                           <font>
+                              <Font name="System Bold Italic" size="28.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </top>
+               <right>
+                  <Pane prefHeight="464.0" prefWidth="105.0" BorderPane.alignment="CENTER" />
+               </right>
+               <left>
+                  <Pane prefHeight="464.0" prefWidth="110.0" BorderPane.alignment="CENTER" />
+               </left>
+               <bottom>
+                  <Pane prefHeight="86.0" prefWidth="886.0" BorderPane.alignment="CENTER" />
+               </bottom>
+            </BorderPane>
+         </content>
+    </Tab>
+      <Tab text="Raporty">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="nipTxt" layoutX="38.0" layoutY="42.0" />
+                  <TextField fx:id="monthTxt" layoutX="268.0" layoutY="30.0" />
+                  <TextField fx:id="yearTxt" layoutX="268.0" layoutY="81.0" />
+                  <Button fx:id="money" layoutX="290.0" layoutY="158.0" mnemonicParsing="false" onAction="#moneyClicked" text="Dochód - pensje" />
+                  <Button fx:id="income" layoutX="313.0" layoutY="119.0" mnemonicParsing="false" onAction="#incomeClicked" text="Dochód" />
+                  <Button fx:id="salaries" layoutX="715.0" layoutY="82.0" mnemonicParsing="false" onAction="#salariesClicked" text="Wyplaty pensji" />
+                  <Button fx:id="bookSold" layoutX="471.0" layoutY="69.0" mnemonicParsing="false" onAction="#bookSoldClicked" text="Ile ksiazek sprzedano" />
+                  <Button fx:id="incomeTitle" layoutX="469.0" layoutY="106.0" mnemonicParsing="false" onAction="#incomeTitleClicked" text="Ile zarobiono na tytule" />
+                  <Button fx:id="clientIncome" layoutX="53.0" layoutY="81.0" mnemonicParsing="false" onAction="#clientIncomeClicked" text="Dochód na kliencie" />
+                  <Button fx:id="sold" layoutX="718.0" layoutY="132.0" mnemonicParsing="false" onAction="#soldClicked" text="Ile sprzedano" />
+                  <TextArea fx:id="report" layoutX="38.0" layoutY="233.0" prefHeight="326.0" prefWidth="636.0" />
+                  <TextField fx:id="isbnTxt" layoutX="462.0" layoutY="30.0" />
+                  <Button fx:id="save" layoutX="718.0" layoutY="371.0" mnemonicParsing="false" onAction="#saveClicked" text="Zapisz do pliku" />
+                  <Label layoutX="103.0" layoutY="22.0" text="NIP" />
+                  <Label layoutX="322.0" layoutY="14.0" text="Miesiąc" />
+                  <Label layoutX="328.0" layoutY="59.0" text="Rok" />
+                  <Label layoutX="522.0" layoutY="14.0" text="ISBN" />
+                  <Separator layoutX="222.0" orientation="VERTICAL" prefHeight="206.0" prefWidth="6.0" />
+                  <Separator layoutX="443.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="210.0" prefWidth="6.0" />
+                  <Separator layoutX="650.0" layoutY="-10.0" orientation="VERTICAL" prefHeight="216.0" prefWidth="4.0" />
+                  <Separator layoutX="11.0" layoutY="205.0" prefHeight="5.0" prefWidth="879.0" />
+               </children>
+            </Pane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>
