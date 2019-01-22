@@ -317,7 +317,7 @@ public class OwnerController {
         try {
             sc = new Scanner(selectedFile);
             while (sc.hasNextLine())
-                output.append(sc.nextLine());
+                output.append(sc.nextLine()+"\n");
             //System.out.println(sc.nextLine());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -598,6 +598,7 @@ public class OwnerController {
     private void showSuccesDialog(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Sukces");
+        alert.setHeaderText("Brawo!");
         alert.setContentText("Udało się!");
         alert.showAndWait();
     }
