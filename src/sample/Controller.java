@@ -8,56 +8,100 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Class Controller represents Controller of client application.
+ *
+ * @author Sara Strzałka
+ * @version 1.0
+ */
 public class Controller {
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> isbnCol;
 
+    /**
+     * Represents table with books.
+     */
     @FXML
     private TableView<Book> table;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> autCol;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> titleCol;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> priceCol;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> amoutCol;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> typeCol;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> lengthCol;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> phCol;
 
+    /**
+     * Represents column of table.
+     */
     @FXML
     private TableColumn<?, ?> yearCol;
 
+    /**
+     * Represents searching field.
+     */
     @FXML
     private TextField sprawdz;
 
-
+    /**
+     * Represents array of books read from database.
+     */
     private ArrayList<Book> books = new ArrayList<>();
+    /**
+     * Represents connection URL.
+     */
     private String connectionUrl = "";
 
+    /**
+     * Initializes GUI
+     */
     @FXML
     void initialize() {
-
         connect();
         readBoooks("");
         addToTable();
-
         sprawdz.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) ->
         {
             readBoooks(newValue);
@@ -66,11 +110,17 @@ public class Controller {
 
     }
 
-
+    /**
+     * Sets connection URL.
+     */
     private void connect() {
         connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + "klient" + ";password=" + "";
     }
 
+    /**
+     * Reads books from database and allows to search them through.
+     * @param search searchable statement.
+     */
     private void readBoooks(String search) {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
             String SQL = "SELECT * FROM dbo.KSIAZKI_AUT_WYD";
@@ -93,8 +143,6 @@ public class Controller {
                         books.add(book);
                     }
                 }
-
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,8 +151,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Adds parameters read from database to Table.
+     */
     private void addToTable() {
-
         table.getItems().removeAll(table.getItems());
         ObservableList<Book> data = FXCollections.observableArrayList();
         data.addAll(books);

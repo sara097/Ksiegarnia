@@ -9,30 +9,54 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.*;
 
+/**
+ * Class LoginController represents login window controller.
+ *
+ * @author Sara Strzałka
+ * @version 1.0
+ */
 public class LoginController {
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button clientBtn;
 
+    /**
+     * Represents TextField with login.
+     */
     @FXML
     private TextField loginTxt;
 
+    /**
+     * Represents Textfield with password.
+     */
     @FXML
     private TextField passwordTxt;
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button loginBtn;
 
+    /**
+     * Initializes GUI
+     */
     @FXML
-   void initialize()  {
+    void initialize() {
         loginBtn.setDisable(true);
         loginTxt.textProperty().addListener((observable, oldValue, newValue) -> loginBtn.setDisable(newValue.trim().isEmpty()));
     }
 
+    /**
+     * Opens new window after button click with client login option.
+     * @param event mouse clicked.
+     */
     @FXML
     void clientClicked(ActionEvent event) {
         try {
@@ -44,6 +68,11 @@ public class LoginController {
 
     }
 
+    /**
+     * Opens new window after login button click.
+     * @param event mouse clicked.
+     * @throws IOException input-output exception
+     */
     @FXML
     void logInClicked(ActionEvent event) throws IOException {
         try {
@@ -78,6 +107,12 @@ public class LoginController {
         }
     }
 
+    /**
+     * Connects to database.
+     * @param login login
+     * @param password password
+     * @throws SQLException database exception.
+     */
     private void connect(String login, String password) throws SQLException {
 
         String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + login + ";password=" + password;
@@ -88,6 +123,12 @@ public class LoginController {
 
     }
 
+    /**
+     * Creates new stage and close current one.
+     * @param fxml name of fxml file.
+     * @param name name of new stage.
+     * @throws IOException Input-output Exception.
+     */
     private void newScene(String fxml, String name) throws IOException {
         Stage primaryStage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource((fxml + ".fxml")));

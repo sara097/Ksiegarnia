@@ -10,15 +10,23 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.*;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class OwnerController represents owner appliaction.
+ *
+ * @author Sara Strzałka
+ * @version 1.0
+ */
 public class OwnerController {
 
+    /**
+     * Represents status values.
+     */
     private ObservableList<String> status =
             FXCollections.observableArrayList(
                     "wszystkie",
@@ -27,6 +35,9 @@ public class OwnerController {
                     "anulowane"
             );
 
+    /**
+     * Represents jobs.
+     */
     private ObservableList<String> jobs =
             FXCollections.observableArrayList(
                     "sprzedawca",
@@ -35,161 +46,324 @@ public class OwnerController {
                     "stażysta"
             );
 
+    /**
+     * Represents table of books.
+     */
     @FXML
     private TableView<Book> table;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> isbnCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> autCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> titleCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> priceCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> amoutCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> typeCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> lengthCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> phCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> yearCol;
 
+    /**
+     * Represents table of employees.
+     */
     @FXML
     private TableView<Employee> wrokersTable;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> peselCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> firstnameCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nameCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> posCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> moneyCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> statCol;
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button addWBtn;
 
+    /**
+     * Represents checkBox.
+     */
     @FXML
     private CheckBox oldWorkers;
 
+    /**
+     * Represents table with orders.
+     */
     @FXML
     private TableView<Order> zamTab;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nrCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> isbnZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> titleZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> amountZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> monCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nipCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nameZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> firstnameZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> adressCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> statZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> dateCol;
 
+    /**
+     * Represents choiceBox.
+     */
     @FXML
     private ChoiceBox<String> statsChoice;
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button fileBtn;
 
+    /**
+     * Represents textArea.
+     */
     @FXML
     private TextArea textArea;
 
+    /**
+     * Represents label.
+     */
     @FXML
     private Label peselLabel;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField peselField;
 
+    /**
+     * Represents label.
+     */
     @FXML
     private Label firstnameLabel;
 
+    /**
+     * Represents textField.
+     */
     @FXML
     private TextField firstnameField;
 
+    /**
+     * Represents label.
+     */
     @FXML
     private Label nameLabel;
 
+    /**
+     * Represents textField.
+     */
     @FXML
     private TextField nameField;
 
+    /**
+     * Represents label.
+     */
     @FXML
     private Label jobLabel;
 
+    /**
+     * Represents choice box.
+     */
     @FXML
     private ChoiceBox<String> jobField;
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button addBtn;
 
+    /**
+     * Represents label.
+     */
     @FXML
     private Label headerLabel;
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button changePrice;
 
+    /**
+     * Represents label.
+     */
     @FXML
     private Label newPriceLabel;
 
+    /**
+     * Represents textField.
+     */
     @FXML
     private TextField priceTxt;
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button confirmPrice;
 
+    /**
+     * Represents textField.
+     */
     @FXML
     private TextField searchField;
 
-
+    /**
+     * Represents connection URL.
+     */
     private String connectionUrl;
 
+    /**
+     * Represents array of books.
+     */
     private ArrayList<Book> books = new ArrayList<>();
+
+    /**
+     * Represents array of employees.
+     */
     private ArrayList<Employee> employees = new ArrayList<>();
+
+    /**
+     * Represents array of orders.
+     */
     private ArrayList<Order> orders = new ArrayList<>();
 
 
+    /**
+     * Initializes GUI
+     */
     @FXML
     void initialize() {
         connect("owner", "owner");
@@ -198,16 +372,16 @@ public class OwnerController {
         readBooks("");
         readEmployees("not all");
         readOrders("wszystkie");
-        addToTableBooks(books);
-        addToTableEmplyees(employees);
-        addToTableOrders(orders);
+        addToTableBooks();
+        addToTableEmplyees();
+        addToTableOrders();
 
         statsChoice.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) ->
                 {
                     readOrders(statsChoice.getValue());
-                    addToTableOrders(orders);
+                    addToTableOrders();
                 });
 
         oldWorkers.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) ->
@@ -215,13 +389,13 @@ public class OwnerController {
             if (!newValue) readEmployees("not all");
             else readEmployees("all");
 
-            addToTableEmplyees(employees);
+            addToTableEmplyees();
         });
 
         searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) ->
         {
             readBooks(newValue);
-            addToTableBooks(books);
+            addToTableBooks();
         });
 
         peselLabel.setVisible(false);
@@ -242,7 +416,10 @@ public class OwnerController {
         textArea.setEditable(false);
     }
 
-
+    /**
+     * Action after price change button clicked.
+     * @param event mouse click
+     */
     @FXML
     void changePriceClicked(ActionEvent event) {
 
@@ -253,6 +430,10 @@ public class OwnerController {
 
     }
 
+    /**
+     * Action after confirm new price clicked.
+     * @param event mouse click
+     */
     @FXML
     void confirmPriceClicked(ActionEvent event) {
 
@@ -265,7 +446,7 @@ public class OwnerController {
             execProcChangePrice(price, args);
             searchField.setText("");
             readBooks("");
-            addToTableBooks(books);
+            addToTableBooks();
 
             changePrice.setVisible(true);
             newPriceLabel.setVisible(false);
@@ -275,13 +456,16 @@ public class OwnerController {
             showSuccesDialog();
         } catch (Exception e) {
             e.printStackTrace();
-           showErrorDialog();
+            showErrorDialog();
         }
 
 
     }
 
-
+    /**
+     * Action after add button clicked.
+     * @param event mouse click
+     */
     @FXML
     void addClicked(ActionEvent event) {
         jobField.setItems(jobs);
@@ -301,6 +485,10 @@ public class OwnerController {
 
     }
 
+    /**
+     * Action after file button clicked.
+     * @param event mouse click
+     */
     @FXML
     void fileClicked(ActionEvent event) {
         Stage stage = (Stage) fileBtn.getScene().getWindow();
@@ -317,7 +505,7 @@ public class OwnerController {
         try {
             sc = new Scanner(selectedFile);
             while (sc.hasNextLine())
-                output.append(sc.nextLine()+"\n");
+                output.append(sc.nextLine() + "\n");
             //System.out.println(sc.nextLine());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -328,7 +516,10 @@ public class OwnerController {
 
     }
 
-
+    /**
+     * Action after redundant button clicked.
+     * @param event mouse click
+     */
     @FXML
     void relClicked(ActionEvent event) {
         try {
@@ -339,7 +530,7 @@ public class OwnerController {
             String readAll = "not all";
             if (oldWorkers.isSelected()) readAll = "all";
             readEmployees(readAll);
-            addToTableEmplyees(employees);
+            addToTableEmplyees();
 
             showSuccesDialog();
         } catch (Exception e) {
@@ -348,6 +539,10 @@ public class OwnerController {
         }
     }
 
+    /**
+     * Action after add new employee button clicked.
+     * @param event mouse click
+     */
     @FXML
     void addBtnClicked(ActionEvent event) {
 
@@ -361,7 +556,7 @@ public class OwnerController {
             String readAll = "not all";
             if (oldWorkers.isSelected()) readAll = "all";
             readEmployees(readAll);
-            addToTableEmplyees(employees);
+            addToTableEmplyees();
 
             peselLabel.setVisible(false);
             peselField.setVisible(false);
@@ -379,17 +574,27 @@ public class OwnerController {
 
         } catch (Exception e) {
             e.printStackTrace();
-           showErrorDialog();
+            showErrorDialog();
         }
 
 
     }
 
+    /**
+     * Method that sets URL.
+     * @param login login of user
+     * @param password password of user
+     */
     private void connect(String login, String password) {
         connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + login + ";password=" + password;
     }
 
-
+    /**
+     * Execute procedure changing price.
+     * @param price new price
+     * @param isbn ISBN
+     * @throws SQLException database exception
+     */
     private void execProcChangePrice(BigDecimal price, String isbn) throws SQLException {
 
         Connection con = DriverManager.getConnection(connectionUrl);
@@ -407,6 +612,11 @@ public class OwnerController {
 
     }
 
+    /**
+     * Execute procedure that removes employee.
+     * @param pesel PESEL
+     * @throws SQLException database exception
+     */
     private void execProcRemoveEmployee(String pesel) throws SQLException {
 
         Connection con = DriverManager.getConnection(connectionUrl);
@@ -423,6 +633,14 @@ public class OwnerController {
 
     }
 
+    /**
+     * Execute procedure that adds employee.
+     * @param pesel PESEL
+     * @param imie first name
+     * @param nazwisko last name
+     * @param etat job
+     * @throws SQLException database exception
+     */
     private void execProcAddEmployee(String pesel, String imie, String nazwisko, String etat) throws SQLException {
 
         Connection con = DriverManager.getConnection(connectionUrl);
@@ -432,7 +650,7 @@ public class OwnerController {
                 .prepareCall("{call dbo.DODAJ_PRAC(?, ?, ?, ?)}");
 
         cstmt.setString("PESEL", pesel);
-        cstmt.setString("IMIE", imie);
+        cstmt.setString("IMIĘ", imie);
         cstmt.setString("NAZWISKO", nazwisko);
         cstmt.setString("ETAT", etat);
 
@@ -442,6 +660,10 @@ public class OwnerController {
 
     }
 
+    /**
+     * Reads books from database and allows to search them through.
+     * @param search searchable statement.
+     */
     private void readBooks(String search) {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
             String SQL = "SELECT * FROM dbo.KSIAZKI_AUT_WYD";
@@ -472,6 +694,10 @@ public class OwnerController {
         }
     }
 
+    /**
+     * Reads employees from database with option to show old workers.
+     * @param oldToo option to show old worders
+     */
     private void readEmployees(String oldToo) {
 
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
@@ -497,6 +723,10 @@ public class OwnerController {
 
     }
 
+    /**
+     * Reads orders from database with choosen status.
+     * @param status status
+     */
     private void readOrders(String status) {
 
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
@@ -529,7 +759,10 @@ public class OwnerController {
 
     }
 
-    private void addToTableBooks(ArrayList books) {
+    /**
+     * Adds books to table.
+     */
+    private void addToTableBooks() {
 
         table.getItems().removeAll(table.getItems());
         ObservableList<Book> dataBooks = FXCollections.observableArrayList();
@@ -548,7 +781,10 @@ public class OwnerController {
         table.setItems(dataBooks);
     }
 
-    private void addToTableEmplyees(ArrayList employees) {
+    /**
+     * Adds employees to table.
+     */
+    private void addToTableEmplyees() {
 
         wrokersTable.getItems().removeAll(wrokersTable.getItems());
 
@@ -565,7 +801,10 @@ public class OwnerController {
 
     }
 
-    private void addToTableOrders(ArrayList orders) {
+    /**
+     * Adds orders to table.
+     */
+    private void addToTableOrders() {
 
         zamTab.getItems().removeAll(zamTab.getItems());
 
@@ -587,7 +826,10 @@ public class OwnerController {
 
     }
 
-    private void showErrorDialog(){
+    /**
+     * Shows error dialog.
+     */
+    private void showErrorDialog() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Błąd");
         alert.setHeaderText("Ojej!");
@@ -595,7 +837,10 @@ public class OwnerController {
         alert.showAndWait();
     }
 
-    private void showSuccesDialog(){
+    /**
+     * Shows succes dialog.
+     */
+    private void showSuccesDialog() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Sukces");
         alert.setHeaderText("Brawo!");

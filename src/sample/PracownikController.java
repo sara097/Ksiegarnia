@@ -17,8 +17,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * Class PracownikController represents worker appliaction.
+ *
+ * @author Sara Strzałka
+ * @version 1.0
+ */
 public class PracownikController {
 
+    /**
+     * Represents status values.
+     */
     private ObservableList<String> status =
             FXCollections.observableArrayList(
                     "wszystkie",
@@ -27,6 +36,9 @@ public class PracownikController {
                     "anulowane"
             );
 
+    /**
+     * Represents new status values.
+     */
     private ObservableList<String> newStatus =
             FXCollections.observableArrayList(
                     "zrealizowane",
@@ -34,221 +46,453 @@ public class PracownikController {
                     "anulowane"
             );
 
+    /**
+     * Represents table of books.
+     */
     @FXML
     private TableView<Book> tableBooks;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> isbnCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> autCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> titleCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> priceCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> amoutCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> typeCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> lengthCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> phCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> yearCol;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField searchField;
 
+    /**
+     * Represents button.
+     */
     @FXML
     private Button changePrice;
 
+    /**
+     * Represents label
+     */
     @FXML
     private Label newPriceLabel;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField priceTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private Button confirmPrice;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField isbnTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField titleTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField lengthTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField price2Txt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField idWydTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField yearTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField amountTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField namePHTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField addressTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField telTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField isbnAutTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField idAutTxt;
 
+    /**
+     * Represents CheckBox.
+     */
     @FXML
     private CheckBox newPH;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField firstNameTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField nameTxt;
 
+    /**
+     * Represents ComboBox.
+     */
     @FXML
     private ComboBox<String> typeBox;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField nipTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField imieKlientaTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField nazwiskoKlientaTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField addressKlientaTxt;
 
+    /**
+     * Represents checkBox.
+     */
     @FXML
     private CheckBox nowyKlientBox;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField nrZamTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField isbnZamTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField iloscTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField realizatorTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField dataTxt;
 
+    /**
+     * Represents table of orders.
+     */
     @FXML
     private TableView<Order> zamTab;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nrCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> isbnZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> titleZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> amountZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> monCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nipCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nameZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> firstnameZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> adressCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> statZCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> dateCol;
 
+    /**
+     * Represents choiceBox.
+     */
     @FXML
     private ChoiceBox<String> statsChoice;
 
+    /**
+     * Represents choiceBox.
+     */
     @FXML
     private ChoiceBox<String> newStat;
 
+    /**
+     * Represents checkBox.
+     */
     @FXML
     private CheckBox newAuthor;
 
+    /**
+     * Represents table of authors.
+     */
     @FXML
     private TableView<Author> authorsTable;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> idAutCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> forstnameAutCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> nameAutCol;
 
+    /**
+     * Represents table of publishing houses.
+     */
     @FXML
     private TableView<PublishingHouse> phTable;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> idPhCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> namePhCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> addressPhCol;
 
+    /**
+     * Represents table column.
+     */
     @FXML
     private TableColumn<?, ?> telPhCol;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField newTypeTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField isbnMoreTxt;
 
+    /**
+     * Represents TextField.
+     */
     @FXML
     private TextField amountNewTxt;
 
+    /**
+     * Represents connection URL.
+     */
     private String connectionUrl;
+
+    /**
+     * Represents array of books.
+     */
     private ArrayList<Book> books = new ArrayList<>();
+
+    /**
+     * Represents array of orders.
+     */
     private ArrayList<Order> orders = new ArrayList<>();
+
+    /**
+     * Represents array of types.
+     */
     private ArrayList<String> gatuneks = new ArrayList<>();
+
+    /**
+     * Represents array of authors.
+     */
     private ArrayList<Author> authors = new ArrayList<>();
+    /**
+     * Represents array of publishing houses.
+     */
     private ArrayList<PublishingHouse> phouses = new ArrayList<>();
 
+    /**
+     * Represents observable list of types.
+     */
     private ObservableList<String> types =
             FXCollections.observableArrayList();
 
 
+    /**
+     * Initializes GUI
+     */
     @FXML
     void initialize() {
         connect("pracownik", "pracownik");
@@ -357,6 +601,10 @@ public class PracownikController {
 
     }
 
+    /**
+     * Execute procedure adding author to book.
+     * @param event button clicked
+     */
     @FXML
     void addAuthorToBookClicked(ActionEvent event) {
         try {
@@ -377,6 +625,10 @@ public class PracownikController {
 
     }
 
+    /**
+     * Execute procedure adding book.
+     * @param event button clicked
+     */
     @FXML
     void addBookClicked(ActionEvent event) {
         try {
@@ -408,6 +660,10 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Action after price change button clicked.
+     * @param event mouse click
+     */
     @FXML
     void changePriceClicked(ActionEvent event) {
         changePrice.setVisible(false);
@@ -416,6 +672,10 @@ public class PracownikController {
         confirmPrice.setVisible(true);
     }
 
+    /**
+     * Action after confirm new price clicked.
+     * @param event mouse click
+     */
     @FXML
     void confirmPriceClicked(ActionEvent event) {
         try {
@@ -441,6 +701,10 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Refreshes table of books.
+     * @param event mouse click.
+     */
     @FXML
     void refreshBooksClicked(ActionEvent event) {
         readBooks("");
@@ -451,6 +715,10 @@ public class PracownikController {
         addPHToTable();
     }
 
+    /**
+     * Executes procedure deleting books.
+     * @param event mouse click
+     */
     @FXML
     void deleteBookClicked(ActionEvent event) {
 
@@ -477,6 +745,10 @@ public class PracownikController {
 
     }
 
+    /**
+     * Refreshes order table.
+     * @param event mouse click
+     */
     @FXML
     void refreshOrderClicked(ActionEvent event) {
         readBooks("");
@@ -485,6 +757,10 @@ public class PracownikController {
         addToTableOrders();
     }
 
+    /**
+     * Action after add element of order clicked.
+     * @param event mouse clicked.
+     */
     @FXML
     void addElementClicked(ActionEvent event) {
 
@@ -501,6 +777,10 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Action after add new order clicked.
+     * @param event mouse clicked.
+     */
     @FXML
     void addOrderClicked(ActionEvent event) {
         try {
@@ -537,6 +817,10 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Action after change status clicked.
+     * @param event mouse clicked.
+     */
     @FXML
     void changeStatusClicked(ActionEvent event) {
         try {
@@ -554,6 +838,10 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Action after new amount clicked.
+     * @param event mouse clicked
+     */
     @FXML
     void newAmountClicked(ActionEvent event) {
         try {
@@ -572,7 +860,10 @@ public class PracownikController {
 
     }
 
-
+    /**
+     * Acction after add type clicked.
+     * @param event mouse clicked
+     */
     @FXML
     void addTypeClicked(ActionEvent event) {
 
@@ -590,11 +881,19 @@ public class PracownikController {
 
     }
 
-
+    /**
+     * Method that sets URL.
+     * @param login login of user
+     * @param password password of user
+     */
     private void connect(String login, String password) {
         connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=Ksiegarnia;user=" + login + ";password=" + password;
     }
 
+    /**
+     * Reads books from database and allows to search them through.
+     * @param search searchable statement.
+     */
     private void readBooks(String search) {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
             String SQL = "SELECT * FROM dbo.KSIAZKI_AUT_WYD";
@@ -625,6 +924,10 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Reads orders from database with choosen status.
+     * @param status status
+     */
     private void readOrders(String status) {
 
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
@@ -658,6 +961,9 @@ public class PracownikController {
 
     }
 
+    /**
+     * Reads types from database.
+     */
     private void readTypes() {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
 
@@ -678,6 +984,9 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Adds books to table.
+     */
     private void addToTableBooks() {
 
         tableBooks.getItems().removeAll(tableBooks.getItems());
@@ -697,6 +1006,9 @@ public class PracownikController {
         tableBooks.setItems(dataBooks);
     }
 
+    /**
+     * Adds orders to table.
+     */
     private void addToTableOrders() {
 
         zamTab.getItems().removeAll(zamTab.getItems());
@@ -719,6 +1031,11 @@ public class PracownikController {
 
     }
 
+    /**
+     * Procedure that deletes books.
+     * @param isbn ISBN
+     * @throws SQLException database exception
+     */
     private void execDeteleBook(String isbn) throws SQLException {
 
         Connection con = DriverManager.getConnection(connectionUrl);
@@ -734,7 +1051,12 @@ public class PracownikController {
 
     }
 
-
+    /**
+     * Execute procedure changing price.
+     * @param price new price
+     * @param isbn ISBN
+     * @throws SQLException database exception
+     */
     private void execProcChangePrice(BigDecimal price, String isbn) throws SQLException {
 
         Connection con = DriverManager.getConnection(connectionUrl);
@@ -752,6 +1074,18 @@ public class PracownikController {
 
     }
 
+    /**
+     * Execute procedure adding book.
+     * @param isbn ISBN
+     * @param tytul title
+     * @param dlugosc length
+     * @param cena price
+     * @param gatunek type
+     * @param ID publishing house ID
+     * @param rok year of publishment
+     * @param ilosc amount
+     * @throws SQLException database exception
+     */
     private void execAddBook(String isbn, String tytul, int dlugosc, BigDecimal cena, String gatunek, int ID, String rok, int ilosc) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -772,7 +1106,20 @@ public class PracownikController {
         System.out.println("Book added");
     }
 
-
+    /**
+     * Execute procedure adding book and publishing house.
+     * @param isbn ISBN
+     * @param tytul title
+     * @param dlugosc length
+     * @param cena price
+     * @param gatunek type
+     * @param nazwa publishing house name
+     * @param adres address
+     * @param tel telephone number
+     * @param rok year of publishment
+     * @param ilosc amount
+     * @throws SQLException database exception
+     */
     private void execAddBookAddPH(String isbn, String tytul, int dlugosc, BigDecimal cena, String gatunek, String nazwa, String adres, String tel, String rok, int ilosc) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -795,7 +1142,12 @@ public class PracownikController {
         System.out.println("Book and publishing house added.");
     }
 
-
+    /**
+     * Execute procedure adding author to book.
+     * @param isbn ISBN
+     * @param id author id
+     * @throws SQLException database exception
+     */
     private void execAddAuthorToBook(String isbn, int id) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -810,7 +1162,13 @@ public class PracownikController {
         System.out.println("Author to book added");
     }
 
-
+    /**
+     * Execute procedure adding new author to book.
+     * @param isbn ISBN
+     * @param imie first name
+     * @param nazwisko last name
+     * @throws SQLException database exception
+     */
     private void execAddNewAuthorToBook(String isbn, String imie, String nazwisko) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -818,7 +1176,7 @@ public class PracownikController {
         SQLServerCallableStatement cstmt = (SQLServerCallableStatement) con
                 .prepareCall("{call dbo.DODAJ_NOWY_AUT_DO_KSIAZKI(?,?,?)}");
 
-        cstmt.setString("IMIE", imie);
+        cstmt.setString("IMIĘ", imie);
         cstmt.setString("NAZWISKO", nazwisko);
         cstmt.setString("ISBN", isbn);
 
@@ -826,7 +1184,14 @@ public class PracownikController {
         System.out.println("New author to book added.");
     }
 
-
+    /**
+     * Execute procedure adding order.
+     * @param nip NIP
+     * @param realizator worker
+     * @param data date
+     * @throws SQLException database exception
+     * @throws ParseException parsing exception
+     */
     private void execAddOrder(String nip, String realizator, String data) throws SQLException, ParseException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -846,7 +1211,17 @@ public class PracownikController {
         System.out.println("New order added.");
     }
 
-
+    /**
+     * Execute procedure adding order and new client.
+     * @param nip NIP
+     * @param realizator worker
+     * @param data date
+     * @param imie first name
+     * @param nazwisko last name
+     * @param adres address
+     * @throws SQLException database exception
+     * @throws ParseException parsing exception
+     */
     private void execAddOrderNewClient(String nip, String realizator, String data, String imie, String nazwisko, String adres) throws SQLException, ParseException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -861,7 +1236,7 @@ public class PracownikController {
         cstmt.setString("NIP", nip);
         cstmt.setString("REALIZATOR", realizator);
         cstmt.setDate("DATA", sqlDate);
-        cstmt.setString("IMIE", imie);
+        cstmt.setString("IMIĘ", imie);
         cstmt.setString("NAZWISKO", nazwisko);
         cstmt.setString("ADRES", adres);
 
@@ -869,7 +1244,13 @@ public class PracownikController {
         System.out.println("New order and client added.");
     }
 
-
+    /**
+     * Execute procedure adding element of order.
+     * @param nr order's id
+     * @param isbn ISBN
+     * @param ilosc amount
+     * @throws SQLException database exception
+     */
     private void execAddElemOfOrder(int nr, String isbn, int ilosc) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -885,6 +1266,11 @@ public class PracownikController {
         System.out.println("ELement of order added");
     }
 
+    /**
+     * Execute procedure adding new type.
+     * @param nazwa name
+     * @throws SQLException database exception
+     */
     private void execAddType(String nazwa) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -897,6 +1283,12 @@ public class PracownikController {
         System.out.println("Type added");
     }
 
+    /**
+     * Execute procedure changing order's state
+     * @param nrZam order's id
+     * @param status status
+     * @throws SQLException database exception
+     */
     private void execChangeStat(int nrZam, String status) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -912,6 +1304,12 @@ public class PracownikController {
         System.out.println("Status changed");
     }
 
+    /**
+     * Execute procedure setting new amount of books.
+     * @param isbn ISBN
+     * @param amount new amount
+     * @throws SQLException database exception
+     */
     private void execNewAmount(String isbn, int amount) throws SQLException {
         Connection con = DriverManager.getConnection(connectionUrl);
         Statement stmt = con.createStatement();
@@ -928,6 +1326,9 @@ public class PracownikController {
 
     }
 
+    /**
+     * Read authors from database.
+     */
     private void readAuthors() {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
             String SQL = "SELECT * FROM dbo.AUTORZY";
@@ -946,6 +1347,9 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Adds authors to table.
+     */
     private void addAuthorsToTable() {
         authorsTable.getItems().removeAll(authorsTable.getItems());
         ObservableList<Author> dataAuthors = FXCollections.observableArrayList();
@@ -959,6 +1363,9 @@ public class PracownikController {
         authorsTable.setItems(dataAuthors);
     }
 
+    /**
+     * Read publishing houses from databse.
+     */
     private void readPH() {
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement()) {
             String SQL = "SELECT * FROM dbo.WYDAWNICTWA";
@@ -977,6 +1384,9 @@ public class PracownikController {
         }
     }
 
+    /**
+     * Adds publishing houses to table.
+     */
     private void addPHToTable() {
 
         phTable.getItems().removeAll(phTable.getItems());
@@ -993,6 +1403,9 @@ public class PracownikController {
 
     }
 
+    /**
+     * Shows error dialog.
+     */
     private void showErrorDialog() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Błąd");
@@ -1001,6 +1414,9 @@ public class PracownikController {
         alert.showAndWait();
     }
 
+    /**
+     * Shows succes dialog.
+     */
     private void showSuccesDialog() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Sukces");
